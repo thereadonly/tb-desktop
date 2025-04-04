@@ -19,12 +19,17 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y mercurial
 
     # Switch to branch 'tb' and pull from hg
-    - name: Switch to branch 'tb'
+    - name: Pull from hg to branch
       run: |
-        git checkout -B tb
-        hg clone https://hg.mozilla.org/mozilla-central source/
+        git checkout tb
+        /usr/bin/hg clone https://hg.mozilla.org/mozilla-central source/
         cd source/
-        hg clone https://hg.mozilla.org/comm-central comm/
+        /usr/bin/hg clone https://hg.mozilla.org/comm-central comm/
         git add .
         git commit -m "Daily sync from tb-hg on $(date)" --no-edit
+        git push -u origin tb
+      working-directory: tb-desktop
+      env:
+          GITHUB_TOKEN: ${{ secrets.GTHB_TKN }}
 
+        
