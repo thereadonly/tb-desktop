@@ -23,15 +23,21 @@ jobs:
       run: |
         echo "Present Work Dir:"
         pwd
+        git config user.name
+        git config user.email
+        git config user.email "githubWorkflow@githubActions"
+        git config user.name "githubActionsUser"
+        git fetch
         if ! git rev-parse --verify tb >/dev/null 2>&1; then
           git checkout -b tb
         else
           git checkout tb
         fi
-        git checkout tb
+        git checkout tb # we should be already in here by now.
         /usr/bin/hg clone https://hg.mozilla.org/mozilla-central source/
         cd source/
         /usr/bin/hg clone https://hg.mozilla.org/comm-central comm/
+        cd ..
         git add .
         git commit -m "Daily sync from tb-hg on $(date)" --no-edit
         git push -u origin tb
