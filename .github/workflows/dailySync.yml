@@ -1,0 +1,25 @@
+name: Daily Pull
+
+on:
+  schedule:
+    - cron: '18 6 * * *' # Run once every day.
+jobs:
+  daily-pull-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Check out the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Install Mercurial from Ubuntu's repository
+    - name: Install Mercurial
+      run: sudo apt-get update && sudo apt-get install -y mercurial
+
+    # Switch to branch 'tb'
+    - name: Switch to branch 'tb'
+      run: git checkout -B tb
+
+    # Pull code using Mercurial
+    #- name: Pull code using Mercurial
+    #  run: hg pull && hg update
