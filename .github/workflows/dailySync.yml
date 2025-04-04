@@ -21,8 +21,8 @@ jobs:
     # Switch to branch 'tb' and pull from hg
     - name: Pull from hg to branch
       run: |
-        git config user.name
-        git config user.email
+        # git config user.name
+        # git config user.email
         echo "Present Work Dir: "
         pwd 
         git config user.email "githubWorkflow@githubActions.com"
