@@ -21,6 +21,7 @@ jobs:
     # Switch to branch 'tb' and pull from hg
     - name: Pull from hg to branch
       run: |
+        pwd
         git checkout tb
         /usr/bin/hg clone https://hg.mozilla.org/mozilla-central source/
         cd source/
@@ -28,7 +29,7 @@ jobs:
         git add .
         git commit -m "Daily sync from tb-hg on $(date)" --no-edit
         git push -u origin tb
-      working-directory: tb-desktop
+      #working-directory: tb-desktop
       env:
           GITHUB_TOKEN: ${{ secrets.GTHB_TKN }}
 
