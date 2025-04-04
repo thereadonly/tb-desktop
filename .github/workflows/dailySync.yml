@@ -2,7 +2,8 @@ name: Daily Pull
 
 on:
   schedule:
-    - cron: '25 6 * * *' # Run once every day.
+    - cron: '0 12 * * *' # Run once every day.
+  workflow_dispatch: # Allow manual workflow run as well.
     
 jobs:
   daily-pull-job:
@@ -25,5 +26,5 @@ jobs:
         cd source/
         hg clone https://hg.mozilla.org/comm-central comm/
         git add .
-        git commit -m "Daily sync" --no-edit
+        git commit -m "Daily sync from tb-hg on $(date)" --no-edit
 
