@@ -21,7 +21,13 @@ jobs:
     # Switch to branch 'tb' and pull from hg
     - name: Pull from hg to branch
       run: |
+        echo "Present Work Dir:"
         pwd
+        if ! git rev-parse --verify tb >/dev/null 2>&1; then
+          git checkout -b tb
+        else
+          git checkout tb
+        fi
         git checkout tb
         /usr/bin/hg clone https://hg.mozilla.org/mozilla-central source/
         cd source/
