@@ -21,19 +21,14 @@ jobs:
     # Switch to branch 'tb' and pull from hg
     - name: Pull from gitHub repo to local repo
       run: |
-        echo "Present Work Dir: "
-        pwd 
-        git branch -r
         git config user.email "githubWorkflow@githubActions.com"
         git config user.name "githubActionsUser"
+        git config http.postBuffer 1048576000
         git fetch --all
         git branch -r
         git checkout --track origin/tb
         git branch
         git pull
-        echo "Pull Success"
-        git branch
-        echo "Git Pull completed at: $(date)"
       working-directory: /home/runner/work/tb-desktop/tb-desktop
 
     - name: pull from hg to local git repo
@@ -42,28 +37,19 @@ jobs:
         /usr/bin/hg clone https://hg.mozilla.org/mozilla-central source/
         cd source/
         /usr/bin/hg clone https://hg.mozilla.org/comm-central comm/
-        echo "Pull from hg Completed"
-        echo "Done Time: $(date)"
         
     - name: Add to Local Git
       run: |
-        echo "Start Time:"
-        date
         git add .
         echo "Add complete at:"
-        date
         git commit -m "Daily sync from tb-hg on $(date)" --no-edit
       working-directory: /home/runner/work/tb-desktop/tb-desktop
       
     - name: Push to Remote Repo
       run: |
         echo "Starting push:"
-        date
         git push -u origin tb
         echo "Push complete"
-        date
       working-directory: /home/runner/work/tb-desktop/tb-desktop
       env:
           GITHUB_TOKEN: ${{ secrets.GTHB_TKN }}
-
-        
