@@ -16,13 +16,15 @@ jobs:
 
     # Install Mercurial from Ubuntu's repository
     - name: Install Mercurial
-      run: sudo apt-get update && sudo apt-get install -y mercurial
+      run: sudo apt-get update && sudo apt-get install -y mercurial watchman
 
     # Switch to branch 'tb' and pull from hg
-    - name: Pull from hg to branch
+    - name: Pull from hg to git branch
       run: |
         # git config user.name
         # git config user.email
+        echo "Start Time: "
+        date
         echo "Present Work Dir: "
         pwd 
         git config user.email "githubWorkflow@githubActions.com"
@@ -37,11 +39,23 @@ jobs:
         /usr/bin/hg clone https://hg.mozilla.org/mozilla-central source/
         cd source/
         /usr/bin/hg clone https://hg.mozilla.org/comm-central comm/
-        cd ..
+        echo "Pull from hg Completed"
+        echo "Done Time:"
+        date
+    - name: Git-ify
+      run: |
+        echo "Start Time:"
+        date
         git add .
+        echo "Add complete at:"
+        date
         git commit -m "Daily sync from tb-hg on $(date)" --no-edit
+        echo "Starting push:"
+        date
         git push -u origin tb
-      #working-directory: tb-desktop
+        echo "Push complete"
+        date
+      working-directory: /home/runner/work/tb-desktop/tb-desktop
       env:
           GITHUB_TOKEN: ${{ secrets.GTHB_TKN }}
 
