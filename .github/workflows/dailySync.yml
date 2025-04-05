@@ -2,7 +2,7 @@ name: Daily Pull
 
 on:
   schedule:
-    - cron: '0 12 * * *' # Run once every day.
+    - cron: '45 12 * * *' # Run once every day.
   workflow_dispatch: # Allow manual workflow run as well.
     
 jobs:
@@ -26,6 +26,8 @@ jobs:
         git branch -r
         git config user.email "githubWorkflow@githubActions.com"
         git config user.name "githubActionsUser"
+        git fetch --all
+        git branch -r
         git checkout --track origin/tb
         git branch
         git pull
