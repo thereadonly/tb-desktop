@@ -40,7 +40,7 @@ jobs:
         
     - name: Add to source/comm to local Git
       run: |
-        git add ./source/comm
+        git add -f ./source/comm
         echo "Adding src/comm complete at:"
         git commit -m "Daily src/comm sync from tb-hg on $(date)" --no-edit
       working-directory: /home/runner/work/tb-desktop/tb-desktop
@@ -61,7 +61,7 @@ jobs:
       
     - name: Add to source to local Git
       run: |
-        git add ./source
+        git add -f ./source
         echo "Adding src complete at:"
         git commit -m "Daily src sync from tb-hg on $(date)" --no-edit
       working-directory: /home/runner/work/tb-desktop/tb-desktop
