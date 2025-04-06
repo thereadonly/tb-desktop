@@ -2,7 +2,7 @@ name: Daily Pull
 
 on:
   schedule:
-    - cron: '10 10 * * *' # Run once every day.
+    - cron: '6 6 * * *' # Run once every day.
   workflow_dispatch: # Allow manual workflow run as well.
     
 jobs:
@@ -24,7 +24,7 @@ jobs:
         GIT_CURL_VERBOSE=1  #Set this env variable to debug curl on push
         git config user.email "githubWorkflow@githubActions.com"
         git config user.name "githubActionsUser"
-        #git config http.postBuffer 524288000
+        git config http.postBuffer 52428800 # min size of a file is about 31 mb image in the repo
         git fetch --all
         git branch -r
         git checkout --track origin/ff2tb
@@ -70,8 +70,10 @@ jobs:
       
     - name: GC the git repo again
       run: | 
-          git gc --aggressive --prune=now
-          git repack -a -d --max-pack-size=524288000 
+        echo "Entire disk space:"
+        df -h
+        git gc --prune=now
+        git repack -a -d --max-pack-size=524288000 
       
     - name: Push to Remote Repo
       run: |
