@@ -2,7 +2,7 @@ name: Daily Pull
 
 on:
   schedule:
-    - cron: '15 4 * * *' # Run once every day.
+    - cron: '55 5 * * *' # Run once every day.
   workflow_dispatch: # Allow manual workflow run as well.
     
 jobs:
@@ -24,7 +24,7 @@ jobs:
         GIT_CURL_VERBOSE=1  #Set this env variable to debug curl on push
         git config user.email "githubWorkflow@githubActions.com"
         git config user.name "githubActionsUser"
-        # git config http.postBuffer 4294967296
+        git config http.postBuffer 524288000
         git fetch --all
         git branch -r
         git checkout --track origin/tb
@@ -52,7 +52,8 @@ jobs:
           git repack -a -d --max-pack-size=524288000 
 
     - name: Push to Remote Repo
-      run: |
+      run: | 
+        git pull --rebase
         echo "Starting push:"
         git push -u origin tb
         echo "Push complete"
@@ -67,8 +68,14 @@ jobs:
         git commit -m "Daily src sync from tb-hg on $(date)" --no-edit
       working-directory: /home/runner/work/tb-desktop/tb-desktop
       
+    - name: GC the git repo again
+      run: | 
+          git gc --aggressive --prune=now
+          git repack -a -d --max-pack-size=524288000 
+      
     - name: Push to Remote Repo
       run: |
+        git pull --rebase
         echo "Starting push:"
         git push -u origin tb
         echo "Push complete"
