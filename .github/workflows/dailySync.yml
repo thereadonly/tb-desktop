@@ -2,7 +2,7 @@ name: Daily Pull
 
 on:
   schedule:
-    - cron: '55 5 * * *' # Run once every day.
+    - cron: '10 10 * * *' # Run once every day.
   workflow_dispatch: # Allow manual workflow run as well.
     
 jobs:
@@ -18,54 +18,54 @@ jobs:
     - name: Install Mercurial
       run: sudo apt-get update && sudo apt-get install -y mercurial watchman
 
-    # Switch to branch 'tb' and pull from hg
+    # Switch to branch 'ff2tb' and pull from hg
     - name: Pull from gitHub repo to local repo
       run: |
         GIT_CURL_VERBOSE=1  #Set this env variable to debug curl on push
         git config user.email "githubWorkflow@githubActions.com"
         git config user.name "githubActionsUser"
-        git config http.postBuffer 524288000
+        #git config http.postBuffer 524288000
         git fetch --all
         git branch -r
-        git checkout --track origin/tb
+        git checkout --track origin/ff2tb
         git branch
         git pull
       working-directory: /home/runner/work/tb-desktop/tb-desktop
 
     - name: pull from hg to local git repo
       run: |
-        git checkout tb # We should be already in our branch by now.
+        git checkout ff2tb # We should be already in our branch by now.
         /usr/bin/hg clone https://hg.mozilla.org/mozilla-central source/
-        cd source/
-        /usr/bin/hg clone https://hg.mozilla.org/comm-central comm/
+        #cd source/
+        #/usr/bin/hg clone https://hg.mozilla.org/comm-central comm/
         
-    - name: Add to source/comm to local Git
-      run: |
-        git add -f ./source/comm
-        echo "Adding src/comm complete at:"
-        git commit -m "Daily src/comm sync from tb-hg on $(date)" --no-edit
-      working-directory: /home/runner/work/tb-desktop/tb-desktop
+    #- name: Add to source/comm to local Git
+    #  run: |
+    #    git add -f ./source/comm
+    #    echo "Adding src/comm complete at:"
+    #   git commit -m "Daily src/comm sync from tb-hg on $(date)" --no-edit
+    # working-directory: /home/runner/work/tb-desktop/tb-desktop
       
-    - name: GC the git repo
-      run: | 
-          git gc --aggressive --prune=now
-          git repack -a -d --max-pack-size=524288000 
+    # - name: GC the git repo
+    #   run: | 
+    #       git gc --aggressive --prune=now
+    #       git repack -a -d --max-pack-size=524288000 
 
-    - name: Push to Remote Repo
-      run: | 
-        git pull --rebase
-        echo "Starting push:"
-        git push -u origin tb
-        echo "Push complete"
-      working-directory: /home/runner/work/tb-desktop/tb-desktop
-      env:
-          GITHUB_TOKEN: ${{ secrets.GTHB_TKN }}
+    # - name: Push to Remote Repo
+    #   run: | 
+    #     git pull --rebase
+    #     echo "Starting push:"
+    #     git push -u origin tb
+    #     echo "Push complete"
+    #   working-directory: /home/runner/work/tb-desktop/tb-desktop
+    #   env:
+    #       GITHUB_TOKEN: ${{ secrets.GTHB_TKN }}
       
     - name: Add to source to local Git
       run: |
         git add -f ./source
         echo "Adding src complete at:"
-        git commit -m "Daily src sync from tb-hg on $(date)" --no-edit
+        git commit -m "Daily src sync from hg on $(date)" --no-edit
       working-directory: /home/runner/work/tb-desktop/tb-desktop
       
     - name: GC the git repo again
@@ -76,8 +76,8 @@ jobs:
     - name: Push to Remote Repo
       run: |
         git pull --rebase
-        echo "Starting push:"
-        git push -u origin tb
+        echo "Starting git push"
+        git push -u origin ff2tb
         echo "Push complete"
       working-directory: /home/runner/work/tb-desktop/tb-desktop
       env:
