@@ -21,9 +21,10 @@ jobs:
     # Switch to branch 'tb' and pull from hg
     - name: Pull from gitHub repo to local repo
       run: |
+        GIT_CURL_VERBOSE=1  #Set this env variable to debug curl on push
         git config user.email "githubWorkflow@githubActions.com"
         git config user.name "githubActionsUser"
-        git config http.postBuffer 4294967296
+        # git config http.postBuffer 4294967296
         git fetch --all
         git branch -r
         git checkout --track origin/tb
