@@ -1,0 +1,132 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+<!--
+  List of all the account creation templates. Don't load any JavaScript or
+  CSS in here, those files are handled lazily in the controller and in the
+  various shadowRoots of the views.
+-->
+#include ./accountHubEmailAutoFormTemplate.inc.xhtml
+#include ./accountHubEmailConfigFoundTemplate.inc.xhtml
+#include ./accountHubEmailIncomingFormTemplate.inc.xhtml
+#include ./accountHubEmailOutgoingFormTemplate.inc.xhtml
+#include ./accountHubEmailPasswordFormTemplate.inc.xhtml
+#include ./accountHubEmailSyncAccountsFormTemplate.inc.xhtml
+#include ./accountHubEmailAddedSuccessTemplate.inc.xhtml
+#include ./accountHubFooterTemplate.inc.xhtml
+#include ./accountHubHeaderTemplate.inc.xhtml
+#include ./accountHubStepTemplate.inc.xhtml
+<html:template id="accountHubDialog" xmlns="http://www.w3.org/1999/xhtml">
+  <dialog class="account-hub-dialog">
+  </dialog>
+</html:template>
+
+<html:template id="accountHubStart" xmlns="http://www.w3.org/1999/xhtml">
+  <header class="hub-header">
+    <div id="welcomeHeader" class="start-header" hidden="hidden">
+      <img src="chrome://branding/content/logo-gradient.svg" alt="" />
+      <h1 data-l10n-id="account-hub-welcome-line">
+        <span data-l10n-name="brand-name"></span>
+      </h1>
+    </div>
+    <div id="defaultHeader" class="start-header" hidden="hidden">
+      <img src="chrome://branding/content/logo-gradient.svg" alt="" />
+      <h1>
+        <span
+          class="start-header-brand-name"
+          data-l10n-id="account-hub-brand"></span>
+        <span
+          class="start-header-title"
+          data-l10n-id="account-hub-title"></span>
+      </h1>
+    </div>
+  </header>
+
+  <div class="hub-body">
+    <div class="hub-body-grid"></div>
+#ifdef NIGHTLY_BUILD
+    <button
+      id="hubSyncButton"
+      data-l10n-id="account-hub-sync-button"
+      class="button button-flat"
+      type="button"
+      hidden="hidden"></button>
+#endif
+  </div>
+
+  <footer class="hub-footer">
+    <ul class="reset-list footer-links">
+      <li>
+        <a
+          id="hubReleaseNotes"
+          data-l10n-id="account-hub-release-notes"></a>
+      </li>
+      <li>
+        <a
+          href="https://support.mozilla.org/products/thunderbird"
+          data-l10n-id="account-hub-support"
+          onclick="openLinkExternally(this.href);"></a>
+      </li>
+      <li>
+        <a
+          href="https://www.thunderbird.net/donate/?utm_source=thunderbird_account_hub&amp;utm_medium=referral&amp;utm_content=hub_footer"
+          data-l10n-id="account-hub-donate"
+          onclick="openLinkExternally(this.href);"></a>
+      </li>
+    </ul>
+  </footer>
+</html:template>
+
+<html:template id="accountHubEmailSetup" xmlns="http://www.w3.org/1999/xhtml">
+
+  <email-auto-form id="emailAutoConfigSubview"
+                   title-id="account-hub-email-setup-header"
+                   class="account-hub-step">
+  </email-auto-form>
+
+  <email-manual-incoming-form id="emailIncomingConfigSubview"
+                              title-id="account-hub-email-setup-incoming"
+                              class="account-hub-step"
+                              hidden="hidden">
+  </email-manual-incoming-form>
+
+  <email-manual-outgoing-form id="emailOutgoingConfigSubview"
+                              title-id="account-hub-email-setup-outgoing"
+                              class="account-hub-step"
+                              hidden="hidden">
+  </email-manual-outgoing-form>
+
+  <email-config-found id="emailConfigFoundSubview"
+                      title-id="account-hub-email-config-found"
+                      class="account-hub-step"
+                      hidden="hidden">
+    <!-- Account Hub Email Config Found Subview -->
+  </email-config-found >
+
+  <email-password-form id="emailPasswordSubview"
+                       title-id="account-hub-email-enter-password"
+                       class="account-hub-step"
+                       hidden="hidden">
+    <!-- Account Hub Email Password Subview -->
+  </email-password-form>
+
+  <email-sync-accounts-form id="emailSyncAccountsSubview"
+                            title-id="account-hub-email-sync-accounts"
+                            class="account-hub-step"
+                            hidden="hidden">
+    <!-- Account Hub Email Sync Accounts Subview -->
+  </email-sync-accounts-form>
+  <email-added-success id="emailAddedSuccessSubview"
+                       class="account-hub-step"
+                       hidden="hidden">
+    <!-- Account Hub Email Success Subview -->
+  </email-added-success>
+
+  <account-hub-footer id="emailFooter" class="hub-footer"></account-hub-footer>
+
+  <div id="loadingOverlay">
+    <div class="loader-outside">
+      <div class="loader-inside"></div>
+    </div>
+  </div>
+</html:template>
