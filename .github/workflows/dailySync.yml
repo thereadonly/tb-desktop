@@ -2,7 +2,7 @@ name: Daily Pull
 
 on:
   schedule:
-    - cron: '45 12 * * *' # Run once every day.
+    - cron: '15 4 * * *' # Run once every day.
   workflow_dispatch: # Allow manual workflow run as well.
     
 jobs:
@@ -23,7 +23,7 @@ jobs:
       run: |
         git config user.email "githubWorkflow@githubActions.com"
         git config user.name "githubActionsUser"
-        git config http.postBuffer 1048576000
+        git config http.postBuffer 4294967296
         git fetch --all
         git branch -r
         git checkout --track origin/tb
@@ -38,11 +38,32 @@ jobs:
         cd source/
         /usr/bin/hg clone https://hg.mozilla.org/comm-central comm/
         
-    - name: Add to Local Git
+    - name: Add to source/comm to local Git
       run: |
-        git add .
-        echo "Add complete at:"
-        git commit -m "Daily sync from tb-hg on $(date)" --no-edit
+        git add ./source/comm
+        echo "Adding src/comm complete at:"
+        git commit -m "Daily src/comm sync from tb-hg on $(date)" --no-edit
+      working-directory: /home/runner/work/tb-desktop/tb-desktop
+      
+    - name: GC the git repo
+      run: | 
+          git gc --aggressive --prune=now
+          git repack -a -d --max-pack-size=524288000 
+
+    - name: Push to Remote Repo
+      run: |
+        echo "Starting push:"
+        git push -u origin tb
+        echo "Push complete"
+      working-directory: /home/runner/work/tb-desktop/tb-desktop
+      env:
+          GITHUB_TOKEN: ${{ secrets.GTHB_TKN }}
+      
+    - name: Add to source to local Git
+      run: |
+        git add ./source
+        echo "Adding src complete at:"
+        git commit -m "Daily src sync from tb-hg on $(date)" --no-edit
       working-directory: /home/runner/work/tb-desktop/tb-desktop
       
     - name: Push to Remote Repo
