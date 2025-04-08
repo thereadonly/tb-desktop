@@ -21,6 +21,8 @@ jobs:
     # Switch to branch 'ff2tb' and pull from hg
     - name: Pull from gitHub repo to local repo
       run: |
+        echo "Disk space:"
+        df -h
         GIT_CURL_VERBOSE=1  #Set this env variable to debug curl on push
         git config user.email "githubWorkflow@githubActions.com"
         git config user.name "githubActionsUser"
@@ -30,12 +32,16 @@ jobs:
         git checkout --track origin/ff2tb
         git branch
         git pull
+        echo "Disk space after repo pull:"
+        df -h
       working-directory: /home/runner/work/tb-desktop/tb-desktop
 
     - name: pull from hg to local git repo
       run: |
         git checkout ff2tb # We should be already in our branch by now.
         /usr/bin/hg clone https://hg.mozilla.org/mozilla-central source/
+        echo "Current disk space after pull:"
+        df -h
         #cd source/
         #/usr/bin/hg clone https://hg.mozilla.org/comm-central comm/
         
@@ -68,11 +74,9 @@ jobs:
         git commit -m "Daily src sync from hg on $(date)" --no-edit
       working-directory: /home/runner/work/tb-desktop/tb-desktop
       
-    - name: GC the git repo again
+    - name: Git Repack the repo for optimizing git push
       run: | 
-        echo "Entire disk space:"
-        df -h
-        git gc --prune=now
+        #git gc --prune=now
         git repack -a -d --max-pack-size=524288000 
       
     - name: Push to Remote Repo
