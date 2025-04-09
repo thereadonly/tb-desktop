@@ -74,10 +74,10 @@ jobs:
         git commit -m "Daily src sync from hg on $(date)" --no-edit
       working-directory: /home/runner/work/tb-desktop/tb-desktop
       
-    - name: Git Repack the repo for optimizing git push
+    - name: Git GC the repo for optimizing git push
       run: | 
-        #git gc --prune=now
-        git repack -a -d --max-pack-size=524288000 
+        git gc --prune=now
+        #git repack -a -d --max-pack-size=524288000 
       
     - name: Push to Remote Repo
       run: |
