@@ -1,8 +1,8 @@
 name: Daily Pull
 
 on:
-  schedule:
-    - cron: '6 6 * * *' # Run once every day.
+  #schedule:
+  #  - cron: '6 6 * * *' # Run once every day.
   workflow_dispatch: # Allow manual workflow run as well.
     
 jobs:
